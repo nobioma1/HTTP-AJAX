@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 import FriendsList from '../FriendsList';
 import Header from '../Header';
+import FriendForm from '../FriendForm';
 
 const AppContainer = styled.div`
   width: 100%;
@@ -29,12 +31,30 @@ class App extends Component {
 
   render() {
     return (
-      <AppContainer>
-        <Header />
-        <MainContainer>
-          <FriendsList friends={this.state.friends} />
-        </MainContainer>
-      </AppContainer>
+      <Router>
+        <AppContainer>
+          <Header />
+          <MainContainer>
+            <Switch>
+              <Route
+                exact
+                path="/"
+                render={props => (
+                  <FriendsList {...props} friends={this.state.friends} />
+                )}
+              />
+              <Route
+                path="/add_friend"
+                render={props => <FriendForm {...props} />}
+              />
+              <Route
+                path="/edit_friend"
+                render={props => <FriendForm {...props} />}
+              />
+            </Switch>
+          </MainContainer>
+        </AppContainer>
+      </Router>
     );
   }
 }
