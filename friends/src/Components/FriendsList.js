@@ -3,38 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { FaPlus } from 'react-icons/fa';
 
-const FriendsListContainer = styled.div`
-  width: 650px;
-  border-radius: 3px;
-  padding: 10px;
-  box-shadow: -4px 4px 9px -4px rgba(34, 39, 37, 1);
-  background-color: #f7f7f2;
-  margin-bottom: 20px;
-`;
-
-const FriendsListHeader = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  padding: 10px;
-
-  h3 {
-    margin: 0;
-    text-decoration: underline;
-    font-family: cursive;
-    font-size: 25px;
-  }
-
-  button {
-    padding: 5px;
-    border-radius: 5px;
-    transition: 0.4s ease-in-out;
-    &:hover {
-      color: #f7f7f2;
-      background-color: #899878;
-    }
-  }
-`;
+import { ContainerCard, ContainerCardHeader } from './sharedStyle';
 
 const FriendDiv = styled.li`
   border-bottom: 1px solid #899878;
@@ -48,15 +17,17 @@ const FriendDiv = styled.li`
   }
 `;
 
-const FriendsList = props => {
+const FriendForm = props => {
+  const goToAddFriend = () => props.history.push('/add_friend');
+
   return (
-    <FriendsListContainer>
-      <FriendsListHeader>
+    <ContainerCard>
+      <ContainerCardHeader>
         <h3>My Friends</h3>
-        <button>
+        <button onClick={goToAddFriend}>
           <FaPlus /> Add New Friend
         </button>
-      </FriendsListHeader>
+      </ContainerCardHeader>
       <ol>
         {props.friends.map(friend => (
           <FriendDiv key={friend.id}>
@@ -72,16 +43,16 @@ const FriendsList = props => {
           </FriendDiv>
         ))}
       </ol>
-    </FriendsListContainer>
+    </ContainerCard>
   );
 };
 
-FriendsList.propTypes = {
+FriendForm.propTypes = {
   friends: PropTypes.array.isRequired
 };
 
-FriendsList.defaultProps = {
+FriendForm.defaultProps = {
   friends: []
 };
 
-export default FriendsList;
+export default FriendForm;
