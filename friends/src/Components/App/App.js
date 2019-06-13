@@ -23,11 +23,15 @@ class App extends Component {
   };
 
   componentDidMount() {
+    this.fetchAll();
+  }
+
+  fetchAll = () => {
     axios
       .get('http://localhost:5000/friends')
       .then(res => this.setState({ friends: res.data }))
       .catch(err => this.setState({ err: err.message }));
-  }
+  };
 
   render() {
     return (
