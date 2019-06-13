@@ -33,6 +33,13 @@ class App extends Component {
       .catch(err => this.setState({ err: err.message }));
   };
 
+  deleteFriend = id => {
+    axios
+      .delete(`http://localhost:5000/friends/${id}`)
+      .then(() => this.fetchAll())
+      .catch(err => this.setState({ err: err.message }));
+  }
+
   render() {
     return (
       <Router>
@@ -44,7 +51,11 @@ class App extends Component {
                 exact
                 path="/"
                 render={props => (
-                  <FriendsList {...props} friends={this.state.friends} />
+                  <FriendsList
+                    {...props}
+                    friends={this.state.friends}
+                    deleteFriend={this.deleteFriend}
+                  />
                 )}
               />
               <Route
@@ -52,7 +63,7 @@ class App extends Component {
                 render={props => <FriendForm {...props} />}
               />
               <Route
-                path="/edit_friend"
+                path="/edit_friend/:id"
                 render={props => <FriendForm {...props} />}
               />
             </Switch>
