@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
 import { FaChevronLeft } from 'react-icons/fa';
 
@@ -41,6 +42,15 @@ class AddFriend extends Component {
     this.setState({ [target.name]: target.value });
   };
 
+  addNewFriend = newFriend => {
+    axios
+      .post(`http://localhost:5000/friends/`, newFriend)
+      .then(() => {
+        this.props.fetchAll();
+        this.props.history.push('/');
+      })
+      .catch(err => this.setState({ err: err.message }));
+  };
   getFriend = () => {
     const id = this.props.match.params.id;
     const details = this.props.filterFriend(id);
