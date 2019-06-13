@@ -19,7 +19,7 @@ const MainContainer = styled.div`
 
 class App extends Component {
   state = {
-    friends: []
+    friends: null
   };
 
   componentDidMount() {
@@ -33,12 +33,17 @@ class App extends Component {
       .catch(err => this.setState({ err: err.message }));
   };
 
+  filterFriend = id => {
+    const friends = this.state.friends;
+    return friends.filter(item => item.id === parseInt(id));
+  };
+
   deleteFriend = id => {
     axios
       .delete(`http://localhost:5000/friends/${id}`)
       .then(() => this.fetchAll())
       .catch(err => this.setState({ err: err.message }));
-  }
+  };
 
   render() {
     return (
@@ -46,7 +51,7 @@ class App extends Component {
         <AppContainer>
           <Header />
           <MainContainer>
-            <Switch>
+            {this.state.friends && <Switch>
               <Route
                 exact
                 path="/"
@@ -60,13 +65,21 @@ class App extends Component {
               />
               <Route
                 path="/add_friend"
-                render={props => <FriendForm {...props} />}
+                render={props => (
+                  <FriendForm {...props} fetchAll={this.fetchAll} />
+                )}
               />
               <Route
                 path="/edit_friend/:id"
-                render={props => <FriendForm {...props} />}
+                render={props => (
+                  <FriendForm
+                    {...props}
+                    fetchAll={this.fetchAll}
+                    filterFriend={this.filterFriend}
+                  />
+                )}
               />
-            </Switch>
+            </Switch>}
           </MainContainer>
         </AppContainer>
       </Router>
