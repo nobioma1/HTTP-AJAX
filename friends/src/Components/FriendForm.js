@@ -41,7 +41,16 @@ class AddFriend extends Component {
     this.setState({ [target.name]: target.value });
   };
 
-  submitNewFriend = event => {};
+  getFriend = () => {
+    const id = this.props.match.params.id;
+    const details = this.props.filterFriend(id);
+    this.setState({
+      id,
+      name: details[0].name,
+      age: details[0].age,
+      email: details[0].email
+    });
+  };
 
   goBack = () => this.props.history.goBack();
 
