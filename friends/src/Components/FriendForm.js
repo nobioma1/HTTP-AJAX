@@ -30,17 +30,29 @@ const Form = styled.form`
   }
 `;
 
-class AddFriend extends Component {
+class FriendForm extends Component {
   state = {
+    id: null,
     name: '',
     age: '',
-    email: ''
+    email: '',
+    formAction: null
   };
+
+  componentDidMount() {
+    const pathName = this.props.location.pathname;
+    const formOperation = pathName === '/add_friend' ? 'Add New' : 'Edit';
+    this.setState({ formAction: formOperation });
+
+    if (formOperation === 'Edit') this.getFriend();
+  }
 
   inputHandler = event => {
     const target = event.target;
     this.setState({ [target.name]: target.value });
   };
+
+  goBack = () => this.props.history.goBack();
 
   addNewFriend = newFriend => {
     axios
@@ -51,6 +63,7 @@ class AddFriend extends Component {
       })
       .catch(err => this.setState({ err: err.message }));
   };
+
   getFriend = () => {
     const id = this.props.match.params.id;
     const details = this.props.filterFriend(id);
@@ -62,12 +75,29 @@ class AddFriend extends Component {
     });
   };
 
-  goBack = () => this.props.history.goBack();
+  updateFriend = newDetails => {
+    axios
+      .put(`http://localhost:5000/friends/${this.state.id}`, newDetails)
+      .then(() => {
+        this.props.fetchAll();
+        this.props.history.push('/');
+      })
+      .catch(err => this.setState({ err: err.message }));
+  };
+
+  onSubmit = event => {
+    event.preventDefault();
+    const obj = {
+      name: this.state.name,
+      age: this.state.age,
+      email: this.state.email
+    };
+    const action = this.state.formAction;
+    if (action === 'Add New') this.addNewFriend(obj);
+    if (action === 'Edit') this.updateFriend(obj);    
+  };
 
   render() {
-    const pathName = this.props.location.pathname;
-    const formOperation = pathName === '/add_friend' ? 'Add New' : 'Edit';
-
     return (
       <ContainerCard>
         <ContainerCardHeader>
@@ -75,9 +105,9 @@ class AddFriend extends Component {
             <FaChevronLeft />
             Go Back
           </button>
-          <h3>{`${formOperation} Friend`}</h3>
+          <h3>{`${this.state.formAction} Friend`}</h3>
         </ContainerCardHeader>
-        <Form onSubmit={this.submitNewFriend}>
+        <Form onSubmit={this.onSubmit}>
           <input
             type="text"
             name="name"
@@ -100,7 +130,9 @@ class AddFriend extends Component {
             value={this.state.email}
           />
           <button>
-            {formOperation !== 'Edit' ? 'Add My New Friend' : 'Save Changes'}
+            {this.state.formAction !== 'Edit'
+              ? 'Add My New Friend'
+              : 'Save Changes'}
           </button>
         </Form>
       </ContainerCard>
@@ -108,4 +140,4 @@ class AddFriend extends Component {
   }
 }
 
-export default AddFriend;
+export default FriendForm;
