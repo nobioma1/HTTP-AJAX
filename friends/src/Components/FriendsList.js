@@ -17,7 +17,7 @@ const FriendDiv = styled.li`
   }
 `;
 
-const FriendForm = props => {
+const FriendList = props => {
   const goToAddFriend = () => props.history.push('/add_friend');
 
   return (
@@ -47,12 +47,12 @@ const FriendForm = props => {
   );
 };
 
-FriendForm.propTypes = {
+FriendList.propTypes = {
   friends: PropTypes.array.isRequired
 };
 
-FriendForm.defaultProps = {
+FriendList.defaultProps = {
   friends: []
 };
 
-export default FriendForm;
+export default FriendList;
