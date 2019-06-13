@@ -36,6 +36,7 @@ const ButtonsContainer = styled.div`
 `;
 
 const goToAddFriend = history => history.push('/add_friend');
+const goToEditFriend = (history, id) => history.push(`/edit_friend/${id}`);
 
 const FriendList = ({ friends, history, deleteFriend }) => {
   return (
@@ -59,7 +60,7 @@ const FriendList = ({ friends, history, deleteFriend }) => {
               email: <span>{friend.email}</span>
             </p>
             <ButtonsContainer>
-              <button>
+              <button onClick={() => goToEditFriend(history, friend.id)}>
                 <FaRegEdit /> Edit
               </button>
               <button onClick={() => deleteFriend(friend.id)}>
